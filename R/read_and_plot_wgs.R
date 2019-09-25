@@ -8,13 +8,13 @@ read_wgs <- function(file) {
              na.strings ="", stringsAsFactors= F) %>% as_tibble()
 }
 
-ww_wgs_1000m = read_wgs(file = "WhyR-hackathon/hackathon/data/warsaw_wgs84_every_1000m.txt") %>% 
+ww_wgs_1000m = read_wgs(file = "data/warsaw_wgs84_every_1000m.txt") %>% 
   dplyr::rename(lng=V1, lat=V2, district=V3)
-ww_wgs_2000m = read_wgs(file = "WhyR-hackathon/hackathon/data/warsaw_wgs84_every_2000m.txt") %>% 
+ww_wgs_2000m = read_wgs(file = "data/warsaw_wgs84_every_2000m.txt") %>% 
   dplyr::rename(lng=V1, lat=V2, district=V3)
-ww_wgs_500m = read_wgs(file = "WhyR-hackathon/hackathon/data/warsaw_wgs84_every_500m.txt") %>% 
+ww_wgs_500m = read_wgs(file = "data/warsaw_wgs84_every_500m.txt") %>% 
   dplyr::rename(lng=V1, lat=V2, district_id=V4, district=V4)
-ww_wgs_100m = read_wgs(file = "WhyR-hackathon/hackathon/data/warsaw_wgs84_every_100m.txt") %>% 
+ww_wgs_100m = read_wgs(file = "data/warsaw_wgs84_every_100m.txt") %>% 
   dplyr::rename(lng=V1, lat=V2, district=V3)
 
 ww_wgs_100m %>% count(district) %>% arrange(desc(n))
