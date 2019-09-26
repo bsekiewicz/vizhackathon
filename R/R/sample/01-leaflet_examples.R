@@ -1,5 +1,5 @@
-source("R/00-read_geojson.R")
-source("R/leaflet_functions.R")
+source("R/R/sample/00-read_geojson.R")
+source("R/R/sample/leaflet_functions.R")
 
 # add markers -------
 m %>% 
@@ -67,3 +67,4 @@ m %>%
     lng2=max(amrit$lng), lat2=max(amrit$lat),
     fillColor = "transparent"
   )
+

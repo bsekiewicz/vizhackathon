@@ -5,7 +5,7 @@ library(dplyr)
 library(leaflet)
 library(geojsonio)
 
-x = geojsonio::geojson_read("data/warszawa_dzielnice.geojson", what = "sp")
+x = geojsonio::geojson_read("data/raw/warsaw_distincts.geojson", what = "sp")
 class(x)
 
 # TODO remove warsaw layer which can overlap all districts
