@@ -24,7 +24,7 @@ ui <- bootstrapPage(
 server <- function(input, output, session) {
   # preprocessing -------------------
   source("../R/functions.R")
-  x = readRDS("../data/geojson.Rds")
+  # x = readRDS("../data/geojson.Rds")
   places = readRDS("../data/places.Rds")
   places_wgs84 = readRDS("../data/places_wgs84.Rds")
   
