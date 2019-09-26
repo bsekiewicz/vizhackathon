@@ -17,6 +17,10 @@ ui <- bootstrapPage(
                selectInput("unwanted_types", label = "I dislike:",
                            choices = unique(places$type),
                            selected = "police",
+                           multiple=TRUE, selectize=TRUE),
+               
+               selectInput("districts", label = "District:",
+                           choices = district_choices, selected = NULL,
                            multiple=TRUE, selectize=TRUE)
                
   )
@@ -28,6 +32,8 @@ server <- function(input, output, session) {
   # x = readRDS("../data/geojson.Rds")
   
   wgs <- read_csv('../data/preprocessing/warsaw_wgs84_every_500m.txt')
+  # districts <- read_csv('../data/preprocessing/district_ids_mapping.csv')
+  district_choices <- readRDS('../data/district_choices.Rds')
   places = readRDS("../data/places.Rds")
   places_wgs84 = readRDS("../data/places_wgs84.Rds")
   
@@ -42,13 +48,13 @@ server <- function(input, output, session) {
     print(input$unwanted_types)
     params = list(types_in = input$wanted_types, types_out = input$unwanted_types)
     # params = list(types_in = input$wanted_types, types_out = "police")
-    places_score = score_2(data = places_wgs84, params = params, wgs = wgs)
-    pal = c(
+    places_score = score_3(data = places_wgs84, params = params, wgs = wgs, districts = input$districts)
+    pal = rev(c(
       "#FFB600",
       "#FFD05C",
       "#FFEBB9",
       "#B9B8B7",
-      "#858381")
+      "#858381"))
     
     places_score = places_score %>% 
       mutate(score_cut = cut(score, 
@@ -95,10 +101,11 @@ server <- function(input, output, session) {
                  lng = ~lng, lat = ~lat,
                  # radius = ~rating, 
                  radius = ~200, 
-                 fillOpacity = 0.6,
+                 fillOpacity = 0.5,
                  color = ~score_cut,
                  weight = 0.5,
-                 fill = TRUE)
+                 # popup = "aaa", # TODO
+                 fill = TRUE, highlightOptions=highlightOptions(weight = 5, color = "black", sendToBack = T))
     
   })
   
