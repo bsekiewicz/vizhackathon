@@ -1,9 +1,10 @@
 library(tidyverse)
 library(leaflet)
+library(readr)
 
 # read data ---------
-amrit = read_csv("data/amrit.csv")
-amrit_pop_tim = read_csv("data/amrit_popular_times.csv")
+amrit = read_csv("data/sample/amrit.csv")
+amrit_pop_tim = read_csv("data/sample/amrit_popular_times.csv")
 
 # markers on map ---------
 leaflet(data = amrit) %>% addTiles() %>%

@@ -1,13 +1,12 @@
-  TYPE <- 'atm'
+TYPE <- 'atm'
 
-source('scripts/000_libraries.R')
-source('scripts/100_get_places.R')
-source('scripts/101_get_times.R')
+source('sample-based-whyr-github/scripts/000_libraries.R')
+source('sample-based-whyr-github/scripts/100_get_places.R')
+source('sample-based-whyr-github/scripts/101_get_times.R')
 
 places_data <- places(data = warsaw_wgs84, type = TYPE)
 saveRDS(places_data, 
         file = paste0('data/results/', TYPE, '_', 'raw.rds'))
-
 
 table(unlist(lapply(places_data, nrow)))
 
