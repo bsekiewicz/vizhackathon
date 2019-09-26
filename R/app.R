@@ -23,50 +23,79 @@ ui <- bootstrapPage(
 
 server <- function(input, output, session) {
   # preprocessing -------------------
+  source("../R/functions.R")
   x = readRDS("../data/geojson.Rds")
   places = readRDS("../data/places.Rds")
+  places_wgs84 = readRDS("../data/places_wgs84.Rds")
   
   # prepare leaflet -------------
   m <- leaflet(x) %>%
     addTiles()
   
-  # TODO
-  # m %>% 
-  #   addCircleMarkers(data = sel_places, radius = ~rating, 
-  #                    color = ~"blue", weight = 0.5,
-  #                    fill = TRUE)
-  
   # Reactive expression for the data subsetted to what the user selected
   filteredData <- reactive({
     
-    nsamplegroup = 30
-    sel_places = places[1:n, ] %>% 
-      # filter(type==sel_type) %>% 
-      filter(type %in% input$wanted_types) %>% 
-      group_by(type) %>% 
-      arrange(desc(rating)) %>% 
-      mutate(rank=row_number()) %>% 
-      filter(rank<=nsamplegroup)
+    print(input$wanted_types)
+    print(input$unwanted_types)
+    params = list(types_in = input$wanted_types, types_out = input$unwanted_types)
+    # params = list(types_in = input$wanted_types, types_out = "police")
+    places_score = score(data = places_wgs84, params = params)
+    pal = c(
+      "#FFB600",
+      "#FFD05C",
+      "#FFEBB9",
+      "#B9B8B7",
+      "#858381")
     
-    sel_places
+    places_score = places_score %>% 
+      mutate(score_cut = cut(score, 
+                             breaks = c(0,1,2,3,4,10), include.lowest = F,
+                             labels = pal) %>% as.character())
+    
+    places_score
+      
   })
 
   
   output$map <- renderLeaflet({
     leaflet(places) %>% 
       addTiles() %>%
-      fitBounds(~min(lng), ~min(lat), ~max(lng), ~max(lat))
+      addProviderTiles(providers$CartoDB.Positron) %>% # DONE
+      fitBounds(lng1 = ~min(lng), lat1 = ~min(lat), lng2 = ~max(lng), lat2 = ~max(lat))
   })
   
+  # observeEvent(input$map_click, {
+  #   click <- input$map_click
+  #   print(click)
+  #   text<-paste("Lattitude ", click$lat, "Longtitude ", click$lng)
+  #   
+  #   proxy <- leafletProxy("map")
+  #   proxy %>% clearPopups() %>%
+  #     addPopups(click$lng, click$lat, text)
+  # })
+  
   observe({
-    leafletProxy("map") %>% 
+    # leafletProxy("map") %>% 
+    #   clearShapes() %>%
+    #   clearMarkers() %>%
+    #   addCircleMarkers(data = filteredData(), 
+    #                    radius = 0.1,
+    #                    color = "blue",
+    #                    fillOpacity = 0.7,
+    #                    fill = TRUE)
+    leafletProxy("map") %>%
       clearShapes() %>%
       clearMarkers() %>%
-      addCircleMarkers(data = filteredData(), 
-                       radius = 0.1,
-                       color = "blue",
-                       fillOpacity = 0.7,
-                       fill = TRUE)
+      addTiles() %>%
+      addCircles(data = places_score[], 
+                 lng = ~lng, lat = ~lat,
+                 # radius = ~rating, 
+                 radius = ~250, 
+                 fillOpacity = 0.6,
+                 color = ~score_cut,
+                 weight = 0.5,
+                 fill = TRUE)
+    
   })
   
 }
