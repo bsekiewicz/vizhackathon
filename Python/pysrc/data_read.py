@@ -3,7 +3,7 @@ from typing import List
 import os
 
 # directories
-DATA_DIR = "data/"
+DATA_DIR = "data/raw/"
 
 # extensions
 DATA_EXT = "csv"
@@ -11,7 +11,7 @@ TEXT_EXT = "txt"
 
 # encodings
 BASIC_ENC = 'utf-8'
-FISHN_ENC = 'iso-8859-1'
+FISHN_ENC = 'utf-8' #'iso-8859-1'
 
 # read kwargs
 PLACES_READ_OPTIONS = dict()
@@ -73,10 +73,10 @@ def read_fishnet(grid_size: int) -> pd.DataFrame:
 
 # DEMO #
 def read_amrit_places():
-    df = pd.read_csv("data/amrit.csv", **PLACES_READ_OPTIONS)
+    df = pd.read_csv("data/sample/amrit.csv", **PLACES_READ_OPTIONS)
     return df
 
 
 def read_amrit_occupations():
-    df = pd.read_csv("data/amrit_popular_times.csv", **OCCUPATIONS_READ_OPTIONS)
+    df = pd.read_csv("data/sample/amrit_popular_times.csv", **OCCUPATIONS_READ_OPTIONS)
     return df
