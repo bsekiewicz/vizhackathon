@@ -1,3 +1,4 @@
+library(tidyverse)
 library(shiny)
 library(leaflet)
 library(RColorBrewer)
@@ -8,12 +9,12 @@ ui <- bootstrapPage(
   absolutePanel(top = 10, right = 10,
                 h4("Select your preferences:"),
                 
-               selectInput("wanted_types", label = "Wanted",
+               selectInput("wanted_types", label = "I like:",
                            choices = unique(places$type),
                            selected = "bar",
                            multiple=TRUE, selectize=TRUE),
                
-               selectInput("unwanted_types", label = "Unwanted",
+               selectInput("unwanted_types", label = "I dislike:",
                            choices = unique(places$type),
                            selected = "police",
                            multiple=TRUE, selectize=TRUE)
@@ -25,6 +26,8 @@ server <- function(input, output, session) {
   # preprocessing -------------------
   source("../R/functions.R")
   # x = readRDS("../data/geojson.Rds")
+  
+  wgs <- read_csv('../data/preprocessing/warsaw_wgs84_every_500m.txt')
   places = readRDS("../data/places.Rds")
   places_wgs84 = readRDS("../data/places_wgs84.Rds")
   
@@ -39,7 +42,7 @@ server <- function(input, output, session) {
     print(input$unwanted_types)
     params = list(types_in = input$wanted_types, types_out = input$unwanted_types)
     # params = list(types_in = input$wanted_types, types_out = "police")
-    places_score = score(data = places_wgs84, params = params)
+    places_score = score_2(data = places_wgs84, params = params, wgs = wgs)
     pal = c(
       "#FFB600",
       "#FFD05C",
@@ -87,10 +90,11 @@ server <- function(input, output, session) {
       clearShapes() %>%
       clearMarkers() %>%
       addTiles() %>%
-      addCircles(data = places_score[], 
+      addProviderTiles(providers$CartoDB.Positron) %>% # DONE
+      addCircles(data = filteredData(), 
                  lng = ~lng, lat = ~lat,
                  # radius = ~rating, 
-                 radius = ~250, 
+                 radius = ~200, 
                  fillOpacity = 0.6,
                  color = ~score_cut,
                  weight = 0.5,
