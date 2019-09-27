@@ -4,7 +4,7 @@ We worked on an application (named WHERE) to find the best place in Warsaw accor
 
 ![example](../master/image.png)
 
-# TEAM "PARANORMAL DISTRIBUTION" MEMBERS
+# "PARANORMAL DISTRIBUTION" TEAM MEMBERS
 
 - Karol B ( app designer, presentation )
 - Łukasz Cesarski ( data processing, [LinkedIn](https://www.linkedin.com/in/%C5%82ukasz-cesarski-28498758/) )
