@@ -1,4 +1,7 @@
 tokens/*
+data/preprocessing/*
+*.zip
+
 
 ### PYTHON
 
