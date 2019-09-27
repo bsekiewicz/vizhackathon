@@ -1,7 +1,7 @@
-# Maintainers
+# TEAM MEMBERS
 
-- Bartosz Sękiewicz
-- TODO:
+- Bartosz Sękiewicz [LinkedIn](https://www.linkedin.com/in/bsekiewicz/)
+- Maciej Kasiński [LinkedIn](https://www.linkedin.com/in/maciejkasinski/)
 
 # Project structure
 
