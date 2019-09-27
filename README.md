@@ -24,4 +24,4 @@ We worked on an application (named WHERE) to find the best place in Warsaw accor
   
 Settings files (like .Rproj or .idea) should be in root folder.
 
-# FEATURES
+# FEATURES (TODO)
