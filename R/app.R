@@ -2,6 +2,7 @@ library(tidyverse)
 library(shiny)
 library(leaflet)
 library(RColorBrewer)
+library(magrittr)
 
 ui <- bootstrapPage(
   tags$style(type = "text/css", "html, body {width:100%;height:100%}"),
@@ -20,7 +21,8 @@ ui <- bootstrapPage(
                            multiple=TRUE, selectize=TRUE),
                
                selectInput("districts", label = "District:",
-                           choices = district_choices, selected = NULL,
+                           choices = district_choices, selected = c(10, 4, 2),
+                           # choices = district_choices, selected = NULL,
                            multiple=TRUE, selectize=TRUE)
                
   )
@@ -29,26 +31,27 @@ ui <- bootstrapPage(
 server <- function(input, output, session) {
   # preprocessing -------------------
   source("../R/functions.R")
-  # x = readRDS("../data/geojson.Rds")
   
   wgs <- read_csv('../data/preprocessing/warsaw_wgs84_every_500m.txt')
-  # districts <- read_csv('../data/preprocessing/district_ids_mapping.csv')
-  district_choices <- readRDS('../data/district_choices.Rds')
-  places = readRDS("../data/places.Rds")
-  places_wgs84 = readRDS("../data/places_wgs84.Rds")
+  districts <- read_csv('../data/preprocessing/district_ids_mapping.csv')
+
+  places = read_csv("../data/preprocessing/places.csv")
+  places_wgs84 = read_csv("../data/preprocessing/places_wgs84.csv")
+  popular_times <- read_csv('../data/preprocessing/popular_times.csv')
+  
+  district_choices = districts$id
+  names(district_choices) = as.character(districts$district_name)
   
   # prepare leaflet -------------
-  m <- leaflet(x) %>%
+  m <- leaflet(places) %>%
     addTiles()
   
-  # Reactive expression for the data subsetted to what the user selected
   filteredData <- reactive({
     
     print(input$wanted_types)
     print(input$unwanted_types)
     params = list(types_in = input$wanted_types, types_out = input$unwanted_types)
-    # params = list(types_in = input$wanted_types, types_out = "police")
-    places_score = score_3(data = places_wgs84, params = params, wgs = wgs, districts = input$districts)
+    places_score = score_3(data = places_wgs84, params = params, wgs = wgs, districts = input$districts, popular_times = popular_times)
     pal = rev(c(
       "#FFB600",
       "#FFD05C",
@@ -64,34 +67,15 @@ server <- function(input, output, session) {
     places_score
       
   })
-
   
   output$map <- renderLeaflet({
     leaflet(places) %>% 
       addTiles() %>%
-      addProviderTiles(providers$CartoDB.Positron) %>% # DONE
+      
       fitBounds(lng1 = ~min(lng), lat1 = ~min(lat), lng2 = ~max(lng), lat2 = ~max(lat))
   })
   
-  # observeEvent(input$map_click, {
-  #   click <- input$map_click
-  #   print(click)
-  #   text<-paste("Lattitude ", click$lat, "Longtitude ", click$lng)
-  #   
-  #   proxy <- leafletProxy("map")
-  #   proxy %>% clearPopups() %>%
-  #     addPopups(click$lng, click$lat, text)
-  # })
-  
   observe({
-    # leafletProxy("map") %>% 
-    #   clearShapes() %>%
-    #   clearMarkers() %>%
-    #   addCircleMarkers(data = filteredData(), 
-    #                    radius = 0.1,
-    #                    color = "blue",
-    #                    fillOpacity = 0.7,
-    #                    fill = TRUE)
     leafletProxy("map") %>%
       clearShapes() %>%
       clearMarkers() %>%
@@ -99,14 +83,11 @@ server <- function(input, output, session) {
       addProviderTiles(providers$CartoDB.Positron) %>% # DONE
       addCircles(data = filteredData(), 
                  lng = ~lng, lat = ~lat,
-                 # radius = ~rating, 
                  radius = ~200, 
                  fillOpacity = 0.5,
                  color = ~score_cut,
                  weight = 0.5,
-                 # popup = "aaa", # TODO
                  fill = TRUE, highlightOptions=highlightOptions(weight = 5, color = "black", sendToBack = T))
-    
   })
   
 }
