@@ -1,4 +1,8 @@
-# TEAM MEMBERS
+# DESCRIPTION
+
+We worked on an application (named WHERE) to find the best place in Warsaw according to user preferences. We approached the problem in a very general way, so the results of the application depends mainly on the scoring function. The target application will allow you to find the best place to live, the best place for investment, the best place for a party, etc.
+
+# TEAM "PARANORMAL DISTRIBUTION" MEMBERS
 
 - Karol B ( app designer, presentation )
 - Łukasz Cesarski ( data processing, [LinkedIn](https://www.linkedin.com/in/%C5%82ukasz-cesarski-28498758/) )
