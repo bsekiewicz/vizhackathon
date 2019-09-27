@@ -1,9 +1,12 @@
 # TEAM MEMBERS
 
-- Bartosz Sękiewicz [LinkedIn](https://www.linkedin.com/in/bsekiewicz/)
-- Maciej Kasiński [LinkedIn](https://www.linkedin.com/in/maciejkasinski/)
+- Karol B ( app designer, presentation )
+- Łukasz Cesarski ( data processing, [LinkedIn](https://www.linkedin.com/in/%C5%82ukasz-cesarski-28498758/) )
+- Maciej Kasiński ( app development, [LinkedIn](https://www.linkedin.com/in/maciejkasinski/) )
+- Paula Matosek ( conceptual work, presentation )
+- Bartosz Sękiewicz ( data processing, [LinkedIn](https://www.linkedin.com/in/bsekiewicz/) )
 
-# Project structure
+# PROJECT STRUCTURE (TODO)
 
 - data:  
   - sample  
@@ -16,3 +19,5 @@
 - tokens  
   
 Settings files (like .Rproj or .idea) should be in root folder.
+
+# FEATURES
