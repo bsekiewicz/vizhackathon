@@ -4,7 +4,8 @@
 packages <- c(
   "magrittr", "dplyr", "stringi",       # pipes + data munging
   "jsonlite", "readr",                  # reading data
-  "ggplot2"                             # plots
+  "ggplot2",                             # plots
+  "SDMTools"
 )
 
 # to_install || verify which packages needs to be additionally installed
