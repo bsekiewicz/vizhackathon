@@ -1,8 +1,11 @@
 library(tidyverse)
 library(shiny)
 library(leaflet)
-library(RColorBrewer)
 library(magrittr)
+
+# prepare app config -------------------
+source("../R/config_and_preprocess.R")
+source("../R/functions.R")
 
 ui <- bootstrapPage(
   tags$style(type = "text/css", "html, body {width:100%;height:100%}"),
@@ -29,18 +32,6 @@ ui <- bootstrapPage(
 )
 
 server <- function(input, output, session) {
-  # preprocessing -------------------
-  source("../R/functions.R")
-  
-  wgs <- read_csv('../data/preprocessing/warsaw_wgs84_every_500m.txt')
-  districts <- read_csv('../data/preprocessing/district_ids_mapping.csv')
-
-  places = read_csv("../data/preprocessing/places.csv")
-  places_wgs84 = read_csv("../data/preprocessing/places_wgs84.csv")
-  popular_times <- read_csv('../data/preprocessing/popular_times.csv')
-  
-  district_choices = districts$id
-  names(district_choices) = as.character(districts$district_name)
   
   # prepare leaflet -------------
   m <- leaflet(places) %>%
@@ -48,20 +39,12 @@ server <- function(input, output, session) {
   
   filteredData <- reactive({
     
-    print(input$wanted_types)
-    print(input$unwanted_types)
     params = list(types_in = input$wanted_types, types_out = input$unwanted_types)
     places_score = score_3(data = places_wgs84, params = params, wgs = wgs, districts = input$districts, popular_times = popular_times)
-    pal = rev(c(
-      "#FFB600",
-      "#FFD05C",
-      "#FFEBB9",
-      "#B9B8B7",
-      "#858381"))
-    
-    places_score = places_score %>% 
+    places_score %<>% 
       mutate(score_cut = cut(score, 
-                             breaks = c(0,1,2,3,4,10), include.lowest = F,
+                             breaks = c(0,1,2,3,4,10), # TODO use densier palette
+                             include.lowest = F,
                              labels = pal) %>% as.character())
     
     places_score
@@ -80,7 +63,8 @@ server <- function(input, output, session) {
       clearShapes() %>%
       clearMarkers() %>%
       addTiles() %>%
-      addProviderTiles(providers$CartoDB.Positron) %>% # DONE
+      # TODO why providertiles not working in renderLeaflet layer
+      addProviderTiles(providers$CartoDB.Positron) %>% 
       addCircles(data = filteredData(), 
                  lng = ~lng, lat = ~lat,
                  radius = ~200, 
