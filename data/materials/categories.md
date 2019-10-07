@@ -1,0 +1,26 @@
+|type                    |     n|
+|:-----------------------|-----:|
+|store                   | 52554|
+|doctor                  |  5862|
+|school                  |  4899|
+|beauty_salon            |  3126|
+|furniture_store         |  2014|
+|dentist                 |  1909|
+|cafe                    |  1804|
+|bar                     |  1629|
+|gym                     |  1446|
+|bakery                  |  1438|
+|hospital                |  1215|
+|park                    |  1148|
+|pharmacy                |  1132|
+|car_wash                |   702|
+|post_office             |   695|
+|museum                  |   621|
+|night_club              |   599|
+|supermarket             |   582|
+|veterinary_care         |   501|
+|local_government_office |   458|
+|gas_station             |   434|
+|police                  |   112|
+|taxi_stand              |    11|
+|city_hall               |    10|
