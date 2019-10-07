@@ -2,6 +2,8 @@
 
 We worked on an application (named WHERE) to find the best place in Warsaw according to user preferences. We approached the problem in a very general way, so the results of the application depends mainly on the scoring function. The target application will allow you to find the best place to live, the best place for investment, the best place for a party, etc.
 
+See: https://bsekiewicz.shinyapps.io/where/
+
 ![example](../master/image.png)
 
 # "PARANORMAL DISTRIBUTION" TEAM MEMBERS
